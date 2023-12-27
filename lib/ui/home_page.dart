@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   late HomePresenter _presenter;
 
   _HomePageState() {
@@ -21,7 +20,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
       foregroundColor: Colors.amber,
       backgroundColor: Colors.grey[300],
@@ -40,30 +38,38 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Text("Welcome to Flutter Tic Tac Toe!", style: TextStyle(fontSize: 20),),
+          const Text(
+            "Welcome to Flutter Tic Tac Toe!",
+            style: TextStyle(fontSize: 20),
+          ),
           Center(
             child: ElevatedButton(
               style: raisedButtonStyle,
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => GamePage(widget.title))
-                );
+                    MaterialPageRoute(
+                        builder: (context) => GamePage(widget.title)));
               },
-              child: Text("New game!", style: TextStyle(fontSize: 20),),
+              child: const Text(
+                "New game!",
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           ),
           StreamBuilder(
               stream: _presenter.buildVictoriesStream(),
               builder: (context, snapshot) {
-                var playerCount = _presenter.getVictoryCountFromStream(snapshot);
+                var playerCount =
+                    _presenter.getVictoryCountFromStream(snapshot);
                 if (playerCount <= 0) {
-                  return const Text("No AI wins yet!", style: TextStyle(fontSize: 15));
+                  return const Text("No AI wins yet!",
+                      style: TextStyle(fontSize: 15));
                 }
 
-                return Text("Number of AI wins: $playerCount", style: const TextStyle(fontSize: 15));
-          }),
-
+                return Text("Number of AI wins: $playerCount",
+                    style: const TextStyle(fontSize: 15));
+              }),
         ],
       ),
     );

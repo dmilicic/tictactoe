@@ -49,8 +49,4 @@ class GamePresenter {
 
     showGameEnd(winner);
   }
-
-
-
-
 }

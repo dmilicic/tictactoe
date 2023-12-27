@@ -10,10 +10,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(TicTacToe());
+  runApp(const TicTacToe());
 }
 
 class TicTacToe extends StatelessWidget {
+  const TicTacToe({super.key});
+
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class TicTacToe extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: HomePage(key: Key("key"), title: title),
+      home: HomePage(key: const Key("key"), title: title),
     );
   }
 }

@@ -37,11 +37,13 @@ class Ai {
   int _getBestScore(List<int> board, int currentPlayer) {
     int evaluation = Utils.evaluateBoard(board);
 
-    if (evaluation == currentPlayer)
+    if (evaluation == currentPlayer) {
       return WIN_SCORE;
+    }
 
-    if (evaluation == DRAW)
+    if (evaluation == DRAW) {
       return DRAW_SCORE;
+    }
 
     if (evaluation == Utils.flipPlayer(currentPlayer)) {
       return LOSE_SCORE;
