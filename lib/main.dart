@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'ui/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tictactoe2/ui/screens/home_page.dart';
 import 'firebase_options.dart';
 
 String title = "Flutter Tic Tac Toe";

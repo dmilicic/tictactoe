@@ -6,8 +6,8 @@ class SymbolPainter extends CustomPainter {
   final String symbol;
   final Animation<double> animation;
 
-  final Color colorX = const Color(0xFFff8e7a);
-  final Color colorO = const Color(0xFF00DAC9);
+  final Color colorX = const Color(0xFFFF7148);
+  final Color colorO = const Color(0xFF0CABB1);
 
   static const strokeWidth = 20.0;
 
@@ -40,6 +40,12 @@ class SymbolPainter extends CustomPainter {
     final path2 = Path()
       ..moveTo(size.width, 0)
       ..lineTo(size.width - size.width * path2Value, size.height * path2Value);
+
+    // Draw shadows for the paths
+    // TODO: fix shadow
+    // canvas.drawShadow(path1, Colors.black, 6.0, false);
+    // canvas.drawShadow(path2, Colors.black, 6.0, false);
+
     canvas.drawPath(path2, paintForX);
 
     canvas.drawCircle(const Offset(0, 0), strokeWidth / 2, arcPaint);
@@ -49,20 +55,20 @@ class SymbolPainter extends CustomPainter {
       canvas.drawCircle(Offset(size.width, 0), strokeWidth / 2, arcPaint);
     }
 
-    if (animation.value > 0.95) {
+    if (animation.value > 0.99) {
       canvas.drawCircle(Offset(0, size.height), strokeWidth / 2, arcPaint);
     }
   }
 
   void paintO(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2;
-
     final sweepAngle = animation.value * 2 * pi;
     final arcRect = Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2);
-    canvas.drawArc(arcRect, 0, sweepAngle, false, paintForO);
 
-    // canvas.drawCircle(center, radius, paintForO);
+    // Draw shadow for the arc TODO: fix shadow
+    // final arcPath = Path()..addArc(arcRect, 90, sweepAngle);
+    // canvas.drawShadow(arcPath, Colors.green, 5.0, false);
+
+    canvas.drawArc(arcRect, 0, sweepAngle, false, paintForO);
   }
 
   @override

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tictactoe2/ai/ai.dart';
 import 'package:tictactoe2/providers/AnimationControllerProvider.dart';
-import 'package:tictactoe2/ui/field.dart';
+import 'package:tictactoe2/ui/components/field.dart';
 import 'package:tictactoe2/ui/game_presenter.dart';
+import 'package:tictactoe2/ui/painters/board_painter.dart';
 
 class GamePage extends StatefulWidget {
   final String title;
@@ -107,15 +108,19 @@ class GamePageState extends State<GamePage> {
           Expanded(
               child: Container(
             padding: const EdgeInsets.all(32),
-            child: GridView.count(
-              crossAxisCount: 3,
-              // generate the widgets that will display the board
-              children: List.generate(9, (idx) {
-                return Field(
-                    idx: idx,
-                    onTap: _movePlayed,
-                    playerSymbol: getSymbolForIdx(idx) ?? "N");
-              }),
+            child: CustomPaint(
+              painter: BoardPainter(),
+              child: GridView.count(
+                padding: const EdgeInsets.only(top: 30),
+                crossAxisCount: 3,
+                // generate the widgets that will display the board
+                children: List.generate(9, (idx) {
+                  return Field(
+                      idx: idx,
+                      onTap: _movePlayed,
+                      playerSymbol: getSymbolForIdx(idx) ?? "N");
+                }),
+              ),
             ),
           )),
         ],

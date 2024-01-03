@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tictactoe2/ui/game_page.dart';
+import 'package:tictactoe2/ui/screens/game_page.dart';
 import 'package:tictactoe2/ui/home_presenter.dart';
 
 class HomePage extends StatefulWidget {
