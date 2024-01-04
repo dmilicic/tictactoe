@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tictactoe2/ai/ai.dart';
-import 'package:tictactoe2/providers/AnimationControllerProvider.dart';
 import 'package:tictactoe2/ui/components/field.dart';
-import 'package:tictactoe2/ui/game_presenter.dart';
+import 'package:tictactoe2/presenters/game_presenter.dart';
 import 'package:tictactoe2/ui/painters/board_painter.dart';
+
+import '../colors.dart';
+import '../components/title.dart';
 
 class GamePage extends StatefulWidget {
   final String title;
@@ -94,15 +96,21 @@ class GamePageState extends State<GamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const AppTitle(),
       ),
       body: Column(
         children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.all(60),
-            child: Text(
-              "You are playing as X",
-              style: TextStyle(fontSize: 25),
+          Padding(
+            padding: const EdgeInsets.all(60),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: const TextSpan(
+                text: 'You are playing as ',
+                style: TextStyle(fontSize: 30, color: AppColors.black, fontWeight: FontWeight.normal, height: 1.5),
+                children: <TextSpan>[
+                  TextSpan(text: 'X', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorX)),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -111,14 +119,19 @@ class GamePageState extends State<GamePage> {
             child: CustomPaint(
               painter: BoardPainter(),
               child: GridView.count(
-                padding: const EdgeInsets.only(top: 30),
                 crossAxisCount: 3,
                 // generate the widgets that will display the board
                 children: List.generate(9, (idx) {
-                  return Field(
-                      idx: idx,
-                      onTap: _movePlayed,
-                      playerSymbol: getSymbolForIdx(idx) ?? "N");
+
+                  final padding = getPaddingForField(idx);
+
+                  return Padding(
+                    padding: padding,
+                    child: Field(
+                        idx: idx,
+                        onTap: _movePlayed,
+                        playerSymbol: getSymbolForIdx(idx) ?? "N"),
+                  );
                 }),
               ),
             ),
@@ -127,4 +140,24 @@ class GamePageState extends State<GamePage> {
       ),
     );
   }
+
+  EdgeInsets getPaddingForField(int idx) {
+    switch(idx + 1) {
+      case 1:
+      case 2:
+      case 3:
+        return const EdgeInsets.only(top: 0);
+      case 4:
+      case 5:
+      case 6:
+        return const EdgeInsets.only(top: 30);
+      case 7:
+      case 8:
+      case 9:
+        return const EdgeInsets.only(top: 60);
+      default:
+        return const EdgeInsets.only(left: 0);
+    }
+  }
+
 }

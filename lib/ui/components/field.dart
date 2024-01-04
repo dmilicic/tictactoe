@@ -38,7 +38,7 @@ class _FieldState extends State<Field> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    
+
     if (widget.playerSymbol == "") {
       _controller.reset();
     }
