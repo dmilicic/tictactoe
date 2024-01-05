@@ -30,12 +30,20 @@ class GamePresenter {
     // calculate the next move, could be an expensive operation
     int aiMove = await Future(() => _aiPlayer.play(board, Ai.AI_PLAYER));
 
+    // artificial delay to make the game more interesting
+    await Future(() => Future.delayed(const Duration(milliseconds: 500)));
+
     // do the next move
     board[aiMove] = Ai.AI_PLAYER;
 
     // evaluate the board after the AI player move
     evaluation = Utils.evaluateBoard(board);
     if (evaluation != Ai.NO_WINNERS_YET) {
+      showMoveOnUi(aiMove);
+
+      // wait until the move is shown on the UI
+      await Future(() => Future.delayed(const Duration(milliseconds: 500)));
+
       onGameEnd(evaluation);
     } else {
       showMoveOnUi(aiMove);

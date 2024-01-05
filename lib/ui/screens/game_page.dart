@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tictactoe2/ai/ai.dart';
+import 'package:tictactoe2/ui/components/buttons.dart';
 import 'package:tictactoe2/ui/components/field.dart';
 import 'package:tictactoe2/presenters/game_presenter.dart';
 import 'package:tictactoe2/ui/painters/board_painter.dart';
@@ -27,7 +28,9 @@ class GamePageState extends State<GamePage> {
 
   void _onGameEnd(int winner) {
     var title = "Game over!";
-    var content = "You lose :(";
+    var content = "You lost :(";
+    const drawText = "Draw!";
+
     switch (winner) {
       case Ai.HUMAN: // will never happen :)
         title = "Congratulations!";
@@ -38,7 +41,7 @@ class GamePageState extends State<GamePage> {
         content = "You lose :(";
         break;
       default:
-        title = "Draw!";
+        title = drawText;
         content = "No winners here.";
     }
 
@@ -46,17 +49,19 @@ class GamePageState extends State<GamePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(title),
-            content: Text(content),
+            title: Text(title, style: TextStyle(fontSize: 30, color: title == drawText ? AppColors.primary : AppColors.tertiary)),
+            content: Text(content, style: const TextStyle(fontSize: 20)),
             actions: <Widget>[
-              FloatingActionButton(
-                  onPressed: () {
+
+              AppButton(
+                text: "Restart",
+                size: const Size(80, 50),
+                onPressed: () {
                     setState(() {
                       reinitialize();
                       Navigator.of(context).pop();
                     });
-                  },
-                  child: const Text("Restart"))
+                  })
             ],
           );
         });
@@ -129,7 +134,7 @@ class GamePageState extends State<GamePage> {
                     padding: padding,
                     child: Field(
                         idx: idx,
-                        onTap: _movePlayed,
+                        onTap: _currentPlayer == Ai.HUMAN ? _movePlayed : (idx) => null,
                         playerSymbol: getSymbolForIdx(idx) ?? "N"),
                   );
                 }),

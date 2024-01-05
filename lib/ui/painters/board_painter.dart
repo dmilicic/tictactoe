@@ -13,7 +13,18 @@ class BoardPainter extends CustomPainter {
     ..color = const Color(0xFF0D4458)
     ..style = PaintingStyle.fill;
 
+  final _winLinePaint = Paint()
+    ..color = Colors.red
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 10.0;
+
   final double _circleRadius = 5.0;
+
+  // Add a new variable to store the winning line's start and end points
+  final Offset? winLineStart;
+  final Offset? winLineEnd;
+
+  BoardPainter({this.winLineStart, this.winLineEnd});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -38,10 +49,19 @@ class BoardPainter extends CustomPainter {
     canvas.drawCircle(Offset(width / 3, height), _circleRadius, _circlePaint);
     canvas.drawCircle(Offset(2 * width / 3, 0), _circleRadius, _circlePaint);
     canvas.drawCircle(Offset(2 * width / 3, height), _circleRadius, _circlePaint);
+
+    // Draw the winning line if the start and end points are not null
+    if (winLineStart != null && winLineEnd != null) {
+      canvas.drawLine(winLineStart!, winLineEnd!, _winLinePaint);
+    }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    if (oldDelegate is BoardPainter) {
+      return oldDelegate.winLineStart != winLineStart || oldDelegate.winLineEnd != winLineEnd;
+    }
+
     return false;
   }
 }
