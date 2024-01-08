@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:tictactoe2/utils/Pair.dart';
+
 import 'utils.dart';
 
 class Ai {
@@ -25,6 +29,19 @@ class Ai {
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6],
+  ];
+
+  // this contains all possible winning lines we need to draw based on the winning conditions
+  // it follows the WIN_CONDITIONS_LIST order
+  static final winningLine = <Pair<Offset, Offset>>[
+    Pair(const Offset(0, 0), const Offset(1, 0)),
+    Pair(const Offset(0, 0.5), const Offset(1, 0.5)),
+    Pair(const Offset(0, 1), const Offset(1, 1)),
+    Pair(const Offset(0, 0), const Offset(0, 1)),
+    Pair(const Offset(0.5, 0), const Offset(0.5, 1)),
+    Pair(const Offset(1, 0), const Offset(1, 1)),
+    Pair(const Offset(0, 0), const Offset(1, 1)),
+    Pair(const Offset(0, 1), const Offset(1, 0)),
   ];
 
   /// Returns the optimal move based on the state of the board.

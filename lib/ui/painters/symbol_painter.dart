@@ -1,28 +1,26 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:tictactoe2/ui/colors.dart';
 
 class SymbolPainter extends CustomPainter {
   final String symbol;
   final Animation<double> animation;
 
-  final Color colorX = const Color(0xFFFF7148);
-  final Color colorO = const Color(0xFF0CABB1);
-
   static const strokeWidth = 20.0;
 
   late Paint paintForX = Paint()
-    ..color = colorX
+    ..color = AppColors.colorX
     ..style = PaintingStyle.stroke
     ..strokeWidth = strokeWidth;
 
   late Paint arcPaint = Paint()
-    ..color = colorX
+    ..color = AppColors.colorX
     ..style = PaintingStyle.fill
     ..strokeWidth = strokeWidth;
 
   late Paint paintForO = Paint()
-    ..color = colorO
+    ..color = AppColors.colorO
     ..style = PaintingStyle.stroke
     ..strokeWidth = 15.0;
 
