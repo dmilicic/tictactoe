@@ -56,9 +56,10 @@ class GamePresenter {
       _repository.addVictory(); // add to the bot victories :)
     }
 
-    final winningLineIdx = Utils.getWinningLineIdx(board);
-
-    showWinningLine(winningLineIdx);
+    if (winner != Ai.DRAW) {
+      final winningLineIdx = Utils.getWinningLineIdx(board);
+      showWinningLine(winningLineIdx);
+    }
 
     // wait until the move is shown on the UI
     await Future(() => Future.delayed(const Duration(milliseconds: 500)));
