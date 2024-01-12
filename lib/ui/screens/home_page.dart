@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tictactoe2/main.dart';
 import 'package:tictactoe2/ui/colors.dart';
 import 'package:tictactoe2/ui/components/title.dart';
 import 'package:tictactoe2/ui/screens/game_page.dart';

@@ -9,11 +9,12 @@ class GamePresenter {
   // callbacks into our UI
   void Function(int idx) showMoveOnUi;
   void Function(int winningPlayer) showGameEnd;
+  void Function(int winningLineIdx) showWinningLine;
 
   late GameInfoRepository _repository;
   late Ai _aiPlayer;
 
-  GamePresenter(this.showMoveOnUi, this.showGameEnd) {
+  GamePresenter(this.showMoveOnUi, this.showGameEnd, this.showWinningLine) {
     _repository = GameInfoRepository.instance;
     _aiPlayer = Ai();
   }
@@ -44,16 +45,23 @@ class GamePresenter {
       // wait until the move is shown on the UI
       await Future(() => Future.delayed(const Duration(milliseconds: 500)));
 
-      onGameEnd(evaluation);
+      onGameEnd(evaluation, board: board);
     } else {
       showMoveOnUi(aiMove);
     }
   }
 
-  void onGameEnd(int winner) {
+  void onGameEnd(int winner, {List<int> board = const []}) async {
     if (winner == Ai.AI_PLAYER) {
       _repository.addVictory(); // add to the bot victories :)
     }
+
+    final winningLineIdx = Utils.getWinningLineIdx(board);
+
+    showWinningLine(winningLineIdx);
+
+    // wait until the move is shown on the UI
+    await Future(() => Future.delayed(const Duration(milliseconds: 500)));
 
     showGameEnd(winner);
   }

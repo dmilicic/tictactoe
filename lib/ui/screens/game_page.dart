@@ -6,11 +6,11 @@ import 'package:tictactoe2/ui/components/buttons.dart';
 import 'package:tictactoe2/ui/components/field.dart';
 import 'package:tictactoe2/presenters/game_presenter.dart';
 import 'package:tictactoe2/ui/painters/board_painter.dart';
-import 'package:tictactoe2/ui/painters/winning_line_painter.dart';
 
 import '../../ai/utils.dart';
 import '../colors.dart';
 import '../components/title.dart';
+import '../components/winning_line.dart';
 
 class GamePage extends StatefulWidget {
   final String title;
@@ -26,8 +26,10 @@ class GamePageState extends State<GamePage> {
   late int _currentPlayer;
   late GamePresenter _presenter;
 
+  bool showWinningLine = false;
+
   GamePageState() {
-    _presenter = GamePresenter(_movePlayed, _onGameEnd);
+    _presenter = GamePresenter(_movePlayed, _onGameEnd, _showWinningLine);
   }
 
   void _onGameEnd(int winner) {
@@ -89,6 +91,12 @@ class GamePageState extends State<GamePage> {
     });
   }
 
+  void _showWinningLine(int winningLineIdx) {
+    setState(() {
+      showWinningLine = true;
+    });
+  }
+
   String? getSymbolForIdx(int idx) {
     return Ai.SYMBOLS[board[idx]];
   }
@@ -103,22 +111,37 @@ class GamePageState extends State<GamePage> {
     _currentPlayer = Ai.HUMAN;
     // generate the initial board
     board = List.generate(9, (idx) => 0);
+    showWinningLine = false;
   }
 
   @override
   Widget build(BuildContext context) {
-
     final screenSize = MediaQuery.of(context).size;
     final boardSize = min(screenSize.width, screenSize.height);
-    final winningLine = Utils.getWinningLine(board);
+    final winningLineIdx = Utils.getWinningLineIdx(board);
 
-    final winningLineWidget = winningLine != null ?
-      CustomPaint(
-        painter: WinningLinePainter(
-          winLineStart: winningLine.first * boardSize,
-          winLineEnd: winningLine.second * boardSize,
-        ),
-      ) : Container();
+    const double padding = 32;
+    double boardSizeWithPadding =
+        boardSize - (2 * padding); // 32 is the padding on each side
+
+    var fields = GridView.count(
+        crossAxisCount: 3,
+        // generate the widgets that will display the board
+        children: List.generate(9, (idx) {
+          return Field(
+              idx: idx,
+              onTap: _currentPlayer == Ai.HUMAN ? _movePlayed : (idx) => null,
+              playerSymbol: getSymbolForIdx(idx) ?? "N");
+        }));
+
+    var stackedWidgets = <Widget>[];
+
+    stackedWidgets.add(fields);
+
+    if (showWinningLine) {
+      stackedWidgets.add(WinningLine(
+          winningLineIdx: winningLineIdx, boardSize: boardSizeWithPadding));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -151,31 +174,11 @@ class GamePageState extends State<GamePage> {
           Container(
             width: boardSize,
             height: boardSize,
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.all(padding),
             child: CustomPaint(
               painter: BoardPainter(),
               child: Stack(
-                children: <Widget>[GridView.count(
-                  crossAxisCount: 3,
-                  // generate the widgets that will display the board
-                  children: List.generate(9, (idx) {
-                    return Field(
-                        idx: idx,
-                        onTap: _currentPlayer == Ai.HUMAN
-                            ? _movePlayed
-                            : (idx) => null,
-                        playerSymbol: getSymbolForIdx(idx) ?? "N");
-                  }),
-                ),
-
-                  winningLineWidget,
-
-                  // winLineStart: Offset(boardSize / 7, boardSize / 20),
-                  // winLineEnd: Offset(boardSize / 7, boardSize * 16 / 20),
-
-
-
-                ]
+                children: stackedWidgets,
               ),
             ),
           ),

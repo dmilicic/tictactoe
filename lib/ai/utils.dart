@@ -54,12 +54,24 @@ class Utils {
     return false;
   }
 
+  static int getWinningLineIdx(List<int> board) {
+    for (var i = 0; i < Ai.WIN_CONDITIONS_LIST.length; i++) {
+      var list = Ai.WIN_CONDITIONS_LIST[i];
+      if(isWinningTriplet(board, list, Ai.HUMAN) ||
+          isWinningTriplet(board, list, Ai.AI_PLAYER)) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
   static Pair<Offset, Offset>? getWinningLine(List<int> board) {
     for (var i = 0; i < Ai.WIN_CONDITIONS_LIST.length; i++) {
       var list = Ai.WIN_CONDITIONS_LIST[i];
       if(isWinningTriplet(board, list, Ai.HUMAN) ||
           isWinningTriplet(board, list, Ai.AI_PLAYER)) {
-        return Ai.winningLine[i];
+        return Ai.winningLines[i];
       }
     }
 

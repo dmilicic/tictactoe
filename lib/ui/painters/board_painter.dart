@@ -27,6 +27,9 @@ class BoardPainter extends CustomPainter {
     canvas.drawLine(Offset(0, height / 3), Offset(width, height / 3), _paint);
     canvas.drawLine(Offset(0, 2 * height / 3), Offset(width, 2 * height / 3), _paint);
 
+    canvas.drawLine(Offset(0, height / 3), Offset(width, height / 3), _paint);
+    canvas.drawLine(Offset(0, 2 * height / 3), Offset(width, 2 * height / 3), _paint);
+
     // Draw vertical lines
     canvas.drawLine(Offset(width / 3, 0), Offset(width / 3, height), _paint);
     canvas.drawLine(Offset(2 * width / 3, 0), Offset(2 * width / 3, height), _paint);
