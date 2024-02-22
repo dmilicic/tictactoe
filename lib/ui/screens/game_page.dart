@@ -117,12 +117,9 @@ class GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final boardSize = min(screenSize.width, screenSize.height);
     final winningLineIdx = Utils.getWinningLineIdx(board);
 
     const double padding = 32;
-    double boardSizeWithPadding =
-        boardSize - (2 * padding); // 32 is the padding on each side
 
     var fields = GridView.count(
         crossAxisCount: 3,
@@ -138,51 +135,72 @@ class GamePageState extends State<GamePage> {
 
     stackedWidgets.add(fields);
 
-    if (showWinningLine) {
-      stackedWidgets.add(WinningLine(
-          winningLineIdx: winningLineIdx, boardSize: boardSizeWithPadding));
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const AppTitle(),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(60),
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: const TextSpan(
-                text: 'You are playing as ',
-                style: TextStyle(
-                    fontSize: 30,
-                    color: AppColors.black,
-                    fontWeight: FontWeight.normal,
-                    height: 1.5),
-                children: <TextSpan>[
-                  TextSpan(
-                      text: 'X',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.colorX)),
-                ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(60),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: const TextSpan(
+                  text: 'You are playing as ',
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: AppColors.black,
+                      fontWeight: FontWeight.normal,
+                      height: 1.5),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: 'X',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.colorX)),
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            width: boardSize,
-            height: boardSize,
-            padding: const EdgeInsets.all(padding),
-            child: CustomPaint(
-              painter: BoardPainter(),
-              child: Stack(
-                children: stackedWidgets,
+            Flexible(
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+
+                  final boardSize = min(constraints.maxWidth, screenSize.height / 1.5);
+                  double boardSizeWithPadding =
+                      boardSize - (2 * padding); // 32 is the padding on each side
+
+                  if (showWinningLine) {
+                    stackedWidgets.add(
+                        WinningLine(
+                            winningLineIdx: winningLineIdx,
+                            boardSize: boardSizeWithPadding)
+                    );
+                  }
+
+                  return Container(
+                    width: boardSize,
+                    height: boardSize,
+                    constraints: BoxConstraints(
+                      maxWidth: boardSize,
+                      maxHeight: boardSize,
+                    ),
+                    padding: const EdgeInsets.all(padding),
+                    child: CustomPaint(
+                      painter: BoardPainter(),
+                      child: Stack(
+                        children: stackedWidgets,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
