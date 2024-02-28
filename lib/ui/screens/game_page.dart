@@ -11,6 +11,8 @@ import '../../ai/utils.dart';
 import '../colors.dart';
 import '../components/title.dart';
 import '../components/winning_line.dart';
+import '../fonts.dart';
+import '../ui_threshold.dart';
 
 class GamePage extends StatefulWidget {
   final String title;
@@ -39,7 +41,7 @@ class GamePageState extends State<GamePage> {
 
     switch (winner) {
       case Ai.HUMAN: // will never happen :)
-        title = "Congratulations!";
+        title = "Congrats!";
         content = "You managed to beat an unbeatable AI!";
         break;
       case Ai.AI_PLAYER:
@@ -51,30 +53,7 @@ class GamePageState extends State<GamePage> {
         content = "No winners here.";
     }
 
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title,
-                style: TextStyle(
-                    fontSize: 30,
-                    color: title == drawText
-                        ? AppColors.primary
-                        : AppColors.tertiary)),
-            content: Text(content, style: const TextStyle(fontSize: 20)),
-            actions: <Widget>[
-              AppButton(
-                  text: "Restart",
-                  size: const Size(80, 50),
-                  onPressed: () {
-                    setState(() {
-                      reinitialize();
-                      Navigator.of(context).pop();
-                    });
-                  })
-            ],
-          );
-        });
+    showEndGameDialog(title, content);
   }
 
   void _movePlayed(int idx) {
@@ -89,6 +68,64 @@ class GamePageState extends State<GamePage> {
         _currentPlayer = Ai.HUMAN;
       }
     });
+  }
+
+  void showEndGameDialog(String title, String content) {
+    const drawText = "Draw!";
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          final screenWidth = MediaQuery.of(context).size.width;
+
+          final restartButton = AppButton(
+              text: "Restart",
+              size: screenWidth < UIThreshold.widthThreshold ? const Size(40, 40) : const Size(80, 50),
+              onPressed: () {
+                setState(() {
+                  reinitialize();
+                  Navigator.of(context).pop();
+                });
+              });
+
+          // center the button on smaller screens
+          final actionWidget = screenWidth < UIThreshold.widthThreshold
+              ? Center(child: restartButton)
+              : restartButton;
+
+          return AlertDialog(
+            insetPadding: const EdgeInsets.all(8.0),
+            title: Text(title,
+                style: TextStyle(
+                    fontSize: screenWidth < UIThreshold.widthThreshold ? FontSize.small : FontSize.extraLarge,
+                    color: title == drawText
+                        ? AppColors.primary
+                        : AppColors.tertiary)),
+
+            contentPadding: screenWidth < UIThreshold.widthThreshold
+                ? const EdgeInsets.all(8.0)
+                : const EdgeInsets.all(16.0),
+
+            content: SizedBox(
+              width: screenWidth < UIThreshold.widthThreshold ? 800 : 400,
+              child: Text(
+                  content,
+                  style: TextStyle(
+                      fontSize: screenWidth < UIThreshold.widthThreshold ? FontSize.small : FontSize.large
+                  )
+              ),
+            ),
+
+
+            actionsPadding: screenWidth < UIThreshold.widthThreshold
+                ? const EdgeInsets.all(8.0)
+                : const EdgeInsets.all(16.0),
+
+            actions: <Widget>[
+              actionWidget,
+            ],
+          );
+        });
   }
 
   void _showWinningLine(int winningLineIdx) {
@@ -119,7 +156,8 @@ class GamePageState extends State<GamePage> {
     final screenSize = MediaQuery.of(context).size;
     final winningLineIdx = Utils.getWinningLineIdx(board);
 
-    const double padding = 32;
+    final padding = screenSize.width < UIThreshold.widthThreshold ? 8.0 : 32.0;
+    final backIconSize = screenSize.width < UIThreshold.widthThreshold ? 16.0 : 24.0;
 
     var fields = GridView.count(
         crossAxisCount: 3,
@@ -138,6 +176,14 @@ class GamePageState extends State<GamePage> {
     return Scaffold(
       appBar: AppBar(
         title: const AppTitle(),
+        leading: IconButton(
+          padding: const EdgeInsets.all(0),
+          iconSize: backIconSize,
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )
       ),
       body: Center(
         child: Column(
@@ -145,17 +191,17 @@ class GamePageState extends State<GamePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(60),
+              padding: EdgeInsets.all(padding * 2),
               child: RichText(
                 textAlign: TextAlign.center,
-                text: const TextSpan(
+                text: TextSpan(
                   text: 'You are playing as ',
                   style: TextStyle(
-                      fontSize: 30,
+                      fontSize: screenSize.width < UIThreshold.widthThreshold ? FontSize.small : FontSize.large,
                       color: AppColors.black,
                       fontWeight: FontWeight.normal,
                       height: 1.5),
-                  children: <TextSpan>[
+                  children: const <TextSpan>[
                     TextSpan(
                         text: 'X',
                         style: TextStyle(
@@ -188,9 +234,11 @@ class GamePageState extends State<GamePage> {
                       maxWidth: boardSize,
                       maxHeight: boardSize,
                     ),
-                    padding: const EdgeInsets.all(padding),
+                    padding: EdgeInsets.all(padding),
                     child: CustomPaint(
-                      painter: BoardPainter(),
+                      painter: BoardPainter(
+                        strokeWidth: screenSize.width < UIThreshold.widthThreshold ? 5 : 10,
+                      ),
                       child: Stack(
                         children: stackedWidgets,
                       ),

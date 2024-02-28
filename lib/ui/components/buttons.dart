@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:tictactoe2/ui/ui_threshold.dart';
 
 import '../colors.dart';
+import '../fonts.dart';
 
 class AppButton extends StatelessWidget {
 
@@ -17,6 +19,8 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final fontSize = screenWidth < UIThreshold.widthThreshold ? FontSize.small : FontSize.large;
 
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
       foregroundColor: AppColors.white,
@@ -32,7 +36,7 @@ class AppButton extends StatelessWidget {
     return ElevatedButton(
       style: raisedButtonStyle,
       onPressed: onPressed,
-      child: Text(text, style: const TextStyle(fontSize: 20)),
+      child: Text(text, style: TextStyle(fontSize: fontSize)),
     );
   }
 }

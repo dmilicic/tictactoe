@@ -6,16 +6,22 @@ import '../colors.dart';
 
 class BoardPainter extends CustomPainter {
 
-  final _paint = Paint()
+  late double strokeWidth;
+
+  BoardPainter({
+    this.strokeWidth = 10.0,
+  });
+
+  late final _paint = Paint()
     ..color = AppColors.board
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 10.0;
+    ..strokeWidth = strokeWidth;
 
   final _circlePaint = Paint()
     ..color = AppColors.board
     ..style = PaintingStyle.fill;
 
-  final double _circleRadius = 5.0;
+  late final double _circleRadius = strokeWidth / 2;
 
   @override
   void paint(Canvas canvas, Size size) {

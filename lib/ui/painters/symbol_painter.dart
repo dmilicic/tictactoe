@@ -7,7 +7,7 @@ class SymbolPainter extends CustomPainter {
   final String symbol;
   final Animation<double> animation;
 
-  static const strokeWidth = 20.0;
+  late double strokeWidth = 16.0;
 
   late Paint paintForX = Paint()
     ..color = AppColors.colorX
@@ -22,9 +22,13 @@ class SymbolPainter extends CustomPainter {
   late Paint paintForO = Paint()
     ..color = AppColors.colorO
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 15.0;
+    ..strokeWidth = strokeWidth;
 
-  SymbolPainter({required this.symbol, required this.animation});
+  SymbolPainter({
+    required this.symbol,
+    required this.animation,
+    this.strokeWidth = 18.0,
+  });
 
   void paintX(Canvas canvas, Size size) {
 

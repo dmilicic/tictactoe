@@ -8,18 +8,25 @@ import '../colors.dart';
 
 class WinningLinePainter extends CustomPainter {
 
+  late double strokeWidth;
+
   final Animation<double>? animation;
 
-  final _paint = Paint()
+  late final _paint = Paint()
     ..color = AppColors.board
     ..style = PaintingStyle.fill
-    ..strokeWidth = 10.0;
+    ..strokeWidth = strokeWidth;
 
   // Add a new variable to store the winning line's start and end points
   final int winLineIdx;
   final double boardSize;
 
-  WinningLinePainter({required this.boardSize, this.winLineIdx = 0, this.animation});
+  WinningLinePainter({
+    required this.boardSize,
+    this.winLineIdx = 0,
+    this.animation,
+    this.strokeWidth = 10.0,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -48,8 +55,8 @@ class WinningLinePainter extends CustomPainter {
     }
 
     canvas.drawLine(startOffset, endOffset, _paint);
-    canvas.drawCircle(startOffset, 5, _paint);
-    canvas.drawCircle(endOffset, 5, _paint);
+    canvas.drawCircle(startOffset, strokeWidth / 2, _paint);
+    canvas.drawCircle(endOffset, strokeWidth / 2, _paint);
   }
 
   @override

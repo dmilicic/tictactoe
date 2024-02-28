@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tictactoe2/ui/painters/symbol_painter.dart';
 
+import '../ui_threshold.dart';
+
 class Field extends StatefulWidget {
   final int idx;
   final Function(int idx) onTap;
   final String playerSymbol;
 
-  const Field(
-      {super.key,
-      required this.idx,
-      required this.onTap,
-      required this.playerSymbol});
+  const Field({
+    super.key,
+    required this.idx,
+    required this.onTap,
+    required this.playerSymbol
+  });
 
   @override
   State<Field> createState() => _FieldState();
@@ -38,6 +41,7 @@ class _FieldState extends State<Field> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
 
     if (widget.playerSymbol == "") {
       _controller.reset();
@@ -60,8 +64,11 @@ class _FieldState extends State<Field> with SingleTickerProviderStateMixin {
                   painter: SymbolPainter(
                     symbol: widget.playerSymbol,
                     animation: _controller,
+                    strokeWidth: screenSize.width < UIThreshold.widthThreshold ? 8.0 : 16.0,
                   ),
-                  size: const Size(50, 50));
+                  size: screenSize.width < UIThreshold.widthThreshold
+                      ? const Size(24, 24)
+                      : const Size(50, 50));
             },
           ))),
     );

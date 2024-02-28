@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../ai/ai.dart';
 import '../painters/winning_line_painter.dart';
+import '../ui_threshold.dart';
 
 class WinningLine extends StatefulWidget {
 
@@ -29,6 +30,8 @@ class _WinningLineState extends State<WinningLine> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
 
+    double screenWidth = MediaQuery.of(context).size.width;
+
     if (widget.winningLineIdx >= Ai.winningLines.length || widget.winningLineIdx < 0) {
       _controller.reset();
       return Container();
@@ -44,6 +47,7 @@ class _WinningLineState extends State<WinningLine> with SingleTickerProviderStat
             boardSize: widget.boardSize,
             winLineIdx: widget.winningLineIdx,
             animation: _controller,
+            strokeWidth: screenWidth < UIThreshold.widthThreshold ? 5 : 10,
           ),
         );
       },
