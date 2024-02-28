@@ -116,9 +116,6 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   );
-
-                  // return Text("Number of AI wins: $playerCount",
-                  //     style: const TextStyle(fontSize: 15));
                 }),
           ],
         ),

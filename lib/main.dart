@@ -22,7 +22,9 @@ class TicTacToe extends StatelessWidget {
     return MaterialApp(
       title: title,
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        colorScheme: const ColorScheme.light(
+          background: Colors.white,
+        )
       ),
       home: HomePage(key: const Key("key"), title: title),
     );
