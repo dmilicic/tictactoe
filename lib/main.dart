@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:tictactoe2/ui/screens/home_page.dart';
+
 import 'firebase_options.dart';
 
 String title = "Flutter Tic Tac Toe";
@@ -22,10 +23,9 @@ class TicTacToe extends StatelessWidget {
     return MaterialApp(
       title: title,
       theme: ThemeData(
-        colorScheme: const ColorScheme.light(
-          background: Colors.white,
-        )
-      ),
+          colorScheme: const ColorScheme.light(
+        surface: Colors.white,
+      )),
       home: HomePage(key: const Key("key"), title: title),
     );
   }
